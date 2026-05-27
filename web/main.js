@@ -1,16 +1,20 @@
 import { app } from "../../scripts/app.js";
 
 const id = "Comfy.ZoomLimiter";
+const cat = ["Comfy", "Zoom Limiter"];
 
 function clamp(v, min, max) {
     return Math.min(Math.max(v, min), max);
 }
 
+function getVal(name) {
+    return +app.ui.settings.getSettingValue(id + "." + name);
+}
+
 app.registerExtension({
     name: id,
-    async setup() {
-        const cat = ["Comfy", "Zoom Limiter"];
-        const minSetting = app.ui.settings.addSetting({
+    settings: [
+        {
             id: id + ".Min",
             name: "Zoom Minimum",
             category: cat,
@@ -22,8 +26,8 @@ app.registerExtension({
                 v = +v;
                 if (app.canvas?.ds) app.canvas.ds.min_scale = v;
             },
-        });
-        const maxSetting = app.ui.settings.addSetting({
+        },
+        {
             id: id + ".Max",
             name: "Zoom Maximum",
             category: cat,
@@ -35,21 +39,21 @@ app.registerExtension({
                 v = +v;
                 if (app.canvas?.ds) app.canvas.ds.max_scale = v;
             },
-        });
-
-        // Override scale setter to catch ALL direct assignments
+        },
+    ],
+    async setup() {
         const desc = Object.getOwnPropertyDescriptor(DragAndScale.prototype, "scale");
         Object.defineProperty(DragAndScale.prototype, "scale", {
             get: desc.get,
             set(v) {
-                desc.set.call(this, clamp(+v, +minSetting.value, +maxSetting.value));
+                desc.set.call(this, clamp(+v, getVal("Min"), getVal("Max")));
             },
             configurable: true,
         });
 
         if (app.canvas?.ds) {
-            app.canvas.ds.min_scale = +minSetting.value;
-            app.canvas.ds.max_scale = +maxSetting.value;
+            app.canvas.ds.min_scale = getVal("Min");
+            app.canvas.ds.max_scale = getVal("Max");
         }
     },
 });

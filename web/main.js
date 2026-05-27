@@ -9,9 +9,11 @@ function clamp(v, min, max) {
 app.registerExtension({
     name: id,
     async setup() {
+        const cat = ["Comfy", "Zoom Limiter"];
         const minSetting = app.ui.settings.addSetting({
             id: id + ".Min",
             name: "Zoom Minimum",
+            category: cat,
             type: "number",
             attrs: { min: 0.01, max: 2, step: 0.01 },
             defaultValue: 0.5,
@@ -24,6 +26,7 @@ app.registerExtension({
         const maxSetting = app.ui.settings.addSetting({
             id: id + ".Max",
             name: "Zoom Maximum",
+            category: cat,
             type: "number",
             attrs: { min: 0.5, max: 10, step: 0.01 },
             defaultValue: 1.5,

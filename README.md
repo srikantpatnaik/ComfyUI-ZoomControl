@@ -7,6 +7,7 @@ Restricts the ComfyUI canvas zoom range and exposes user-configurable min/max zo
 - **Zoom Limits** — Prevents zooming out too far or zooming in too close to the canvas.
 - **Configurable** — Two settings (`Zoom Minimum`, `Zoom Maximum`) under `Comfy.ZoomLimiter` in the settings panel.
 - **Live Updates** — Change limits on the fly; the canvas responds immediately.
+- **All Zoom Paths Covered** — Patches the `DragAndScale.scale` setter to catch every zoom path (mouse wheel, trackpad, zoom buttons, Fit View, reset, minimap, viewport restore, API calls).
 - **Zero tracked-file changes** — Installs as a standard custom node under `custom_nodes/`.
 
 ## Installation
